@@ -11,13 +11,13 @@ from schemas import URLRequest, URLResponse
 router = APIRouter()
 
 
-@router.get("/shortens", response_model=List[URLResponse])
+@router.get("/shorten", response_model=List[URLResponse])
 def get_urls(db: Session = Depends(get_db)):
     urls = fetch_urls(db=db)
     return urls
 
 
-@router.post("/shortens", response_model=URLResponse)
+@router.post("/shorten", response_model=URLResponse)
 def post_urls(request: URLRequest, db: Session = Depends(get_db)):
     url = create_short_url(db=db, url=request.url, expiry=request.expiry)
     return url
