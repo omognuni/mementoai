@@ -25,17 +25,16 @@ TestingSessionLocal = sessionmaker(
 @pytest.fixture
 def test_db():
     # Create the database tables
+    Base.metadata.drop_all(bind=TestingEngine)
     Base.metadata.create_all(bind=TestingEngine)
     db = TestingSessionLocal()
     try:
         yield db
     finally:
         db.close()
-        # Drop the database tables
-        Base.metadata.drop_all(bind=TestingEngine)
 
 
-@pytest.fixture
+@pytest.fixture(scope="function")
 def client(test_db):
     def override_get_db():
         try:
@@ -44,5 +43,6 @@ def client(test_db):
             test_db.close()
 
     app.dependency_overrides[get_db] = override_get_db
-    client = TestClient(app)
-    return client
+    with TestClient(app) as client:
+        yield client
+    app.dependency_overrides.clear()

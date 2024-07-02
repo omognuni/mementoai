@@ -18,7 +18,7 @@ def test_get_urls(client):
 
 
 def test_get_url_stats(client):
-    post_response = client.post("/shorten", json={"url": "https://example.com"})
+    post_response = client.post("/shorten", json={"url": "https://example2.com"})
     short_key = post_response.json()["short_key"]
     response = client.get(f"/stats/{short_key}")
     stats = response.json()["stats"]

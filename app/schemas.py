@@ -19,3 +19,12 @@ class URLResponse(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class URLStats(BaseModel):
+    url: str
+    short_key: str
+    stats: int
+
+    class Config:
+        orm_mode = True

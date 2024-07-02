@@ -6,7 +6,7 @@ from typing import List
 
 from database import get_db
 from crud import create_short_url, fetch_original_url, fetch_urls, fetch_url_detail
-from schemas import URLRequest, URLResponse
+from schemas import URLRequest, URLResponse, URLStats
 
 router = APIRouter()
 
@@ -32,7 +32,7 @@ def redirect_url(short_key: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="URL이 존재하지 않습니다.")
 
 
-@router.get("/stats/{short_key}", response_model=URLResponse)
+@router.get("/stats/{short_key}", response_model=URLStats)
 def get_url_stats(short_key: str, db: Session = Depends(get_db)):
     db_url = fetch_url_detail(db=db, short_key=short_key)
     return db_url
