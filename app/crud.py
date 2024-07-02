@@ -4,13 +4,13 @@ from models import URL
 from utils import uuid_to_base62, check_url_expiry
 
 
-def create_short_url(db: Session, url: str, expiry: datetime = None):
+def create_short_url(db: Session, url: str, expiry_date: datetime = None):
     # URL 존재여부 확인
     existing_url = db.query(URL).filter(URL.url == url).first()
     if existing_url:
         return existing_url
 
-    new_url = URL(url=url, expiry_date=expiry, created_at=datetime.now())
+    new_url = URL(url=url, expiry_date=expiry_date, created_at=datetime.now())
     db.add(new_url)
     db.flush()
 

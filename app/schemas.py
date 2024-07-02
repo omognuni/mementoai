@@ -6,7 +6,7 @@ from uuid import UUID
 
 class URLRequest(BaseModel):
     url: str
-    expiry: Optional[datetime] = None
+    expiry_date: Optional[datetime] = None
 
 
 class URLResponse(BaseModel):
@@ -15,6 +15,7 @@ class URLResponse(BaseModel):
     short_key: str
     created_at: datetime
     expiry_date: Optional[datetime] = None
+    stats: int
 
     class Config:
         orm_mode = True

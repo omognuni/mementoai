@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from typing import List
 
 from database import get_db
-from crud import create_short_url, fetch_original_url, fetch_urls
+from crud import create_short_url, fetch_original_url, fetch_urls, fetch_url_detail
 from schemas import URLRequest, URLResponse
 
 router = APIRouter()
@@ -19,7 +19,7 @@ def get_urls(db: Session = Depends(get_db)):
 
 @router.post("/shorten", response_model=URLResponse)
 def post_urls(request: URLRequest, db: Session = Depends(get_db)):
-    url = create_short_url(db=db, url=request.url, expiry=request.expiry)
+    url = create_short_url(db=db, url=request.url, expiry_date=request.expiry_date)
     return url
 
 
@@ -32,9 +32,7 @@ def redirect_url(short_key: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="URL이 존재하지 않습니다.")
 
 
-@router.get(
-    "/stats/{short_key}",
-)
+@router.get("/stats/{short_key}", response_model=URLResponse)
 def get_url_stats(short_key: str, db: Session = Depends(get_db)):
-    db_url = fetch_original_url(db=db, short_key=short_key)
-    return
+    db_url = fetch_url_detail(db=db, short_key=short_key)
+    return db_url
